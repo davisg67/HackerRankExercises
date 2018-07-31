@@ -1,0 +1,65 @@
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    // Complete the hourglassSum function below.
+    static int hourglassSum(int[][] arr) {
+        int[] values = new int[16];
+        
+        //Loop through each hourglass starting at their centers beginning with 
+        //row 1, column 1.
+        int index = 0;
+        for (int row = 1; row < 5; row++)
+        {
+            for (int col = 1; col < 5; col++)
+            {
+                int buf = arr[row][col]; //Start with center postion value.
+                
+                //Hourglass top
+                buf = buf + arr[row-1][col-1];
+                buf = buf + arr[row-1][col];
+                buf = buf + arr[row-1][col+1];
+                
+                //Hourglass bottom
+                buf = buf + arr[row+1][col-1];
+                buf = buf + arr[row+1][col];
+                buf = buf + arr[row+1][col+1];
+                
+                values[index] = buf;
+                index++;
+            }
+        }
+        
+        int maxValue = values.Max();
+        return maxValue;
+    }
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int[][] arr = new int[6][];
+
+        for (int i = 0; i < 6; i++) {
+            arr[i] = Array.ConvertAll(Console.ReadLine().Split(' '), arrTemp => Convert.ToInt32(arrTemp));
+        }
+
+        int result = hourglassSum(arr);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}

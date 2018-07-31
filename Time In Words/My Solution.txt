@@ -1,0 +1,102 @@
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    // Complete the timeInWords function below.
+    static string timeInWords(int h, int m) {
+        string phrase = "unknown";
+        int newHour;
+        int minutesLeft;
+       
+        string[] timeStrings = new string[31]{"o' clock", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "quarter past", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twenty one", "twenty two", "twenty three", "twenty four", "twenty five", "twenty six", "twenty seven", "twenty eight", "twenty nine", "half past"}; 
+        
+        
+        if (m == 0)
+        {
+            phrase = timeStrings[h] + " " + timeStrings[m];
+        }
+        else if (m >= 1 && m <= 30) {
+            if (m == 15)
+            {
+                //quarter past
+                phrase = timeStrings[m] + " " + timeStrings[h];
+            }
+            else if (m == 30)
+            {
+               //half past
+               phrase = timeStrings[m] + " " + timeStrings[h];
+            }
+            else if (m == 1)
+            {
+                phrase = timeStrings[m] + " minute past " + timeStrings[h];
+            }
+            else
+            {
+                phrase = timeStrings[m] + " minutes past " + timeStrings[h];
+            }
+        }
+        else //greater than 30 minutes.
+        {
+            if (h == 12)
+            {
+               newHour = 1; 
+            }
+            else
+            {
+               newHour = h+1; 
+            }
+            
+            minutesLeft = 60 - m;
+            
+            if (m == 45)
+            {
+                phrase = "quarter to " + timeStrings[newHour];
+            }
+            else
+            {
+                if (minutesLeft == 1)
+                {
+                    phrase = timeStrings[minutesLeft] + " minute to " + timeStrings[newHour];
+                }
+                else
+                {
+                    phrase = timeStrings[minutesLeft] + " minutes to " + timeStrings[newHour];
+                } 
+            }  
+        }
+        
+        return phrase;
+    }
+    
+    
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int h = Convert.ToInt32(Console.ReadLine());
+        int m = Convert.ToInt32(Console.ReadLine());
+
+        if (h >= 1 && h <= 12 && m >= 0 && m < 60)
+        {
+            string result = timeInWords(h, m);
+            textWriter.WriteLine(result);
+        }
+        
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+

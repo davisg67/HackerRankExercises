@@ -1,0 +1,123 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.CodeDom.Compiler;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+
+
+namespace HackerRankTest
+{
+    class Program
+    {
+        
+        //n = max size of grid. k = the number of obstacles.
+        //r_q = queen's row position. c_q = queen's column position.
+        static int queensAttack(int n, int k, int r_q, int c_q, int[][] obstacles)
+        {
+            int positions = 0;
+            
+            //Set all possible moves from the queen in 8 directions.
+            int Up = n - r_q;
+            int UpRight = Math.Min(n - r_q, n - c_q);
+            int Right = n - c_q;
+            int DownRight = Math.Min(r_q - 1, n - c_q);
+            int Down = r_q - 1;
+            int DownLeft = Math.Min(r_q - 1, c_q - 1); ;
+            int Left = c_q - 1;
+            int UpLeft = Math.Min(n - r_q, c_q - 1);
+
+            
+            //Look for intersecting obstacles on each direction. Determine the moves between
+            //the queen and the obstacle.
+            foreach (var item in obstacles)
+            {
+                int dif1 = item[0] - r_q; //Obstacle and queen's row position difference.
+                int dif2 = item[1] - c_q; //Obstacle and queen's column position difference.
+                
+
+                if (dif1 == 0) // Horizontal match - queen and ostacle are on the same row.
+                {
+                    if (dif2 > 0)
+                        Right = Math.Min(Right, (dif2 - 1));
+                    else
+                        Left = Math.Min(Left, (-dif2 - 1));
+                    continue;
+                }
+
+                if (dif2 == 0) // Vertical match - queen and ostacle are on the same column.
+                {
+                    if (dif1 > 0)
+                        Up = Math.Min(Up, (dif1 - 1));
+                    else
+                        Down = Math.Min(Down, (-dif1 - 1));
+                    continue;
+                }
+
+
+                if (Math.Abs(dif2) != Math.Abs(dif1))
+                    continue; // Non diagonal.
+                
+
+                if (dif1 > 0) // It's above the queen.
+                {
+                    if (dif2 > 0) // It's right of the queen.
+                        UpRight = Math.Min(UpRight, (dif1 - 1));
+                    else
+                        UpLeft = Math.Min(UpLeft, (dif1 - 1));
+                }
+                else //Below the queen.
+                {
+                    if (dif2 > 0) // It's left of the queen.
+                        DownRight = Math.Min(DownRight, (-dif1 - 1));
+                    else
+                        DownLeft = Math.Min(DownLeft, (-dif1 - 1));
+                }
+            }
+
+            positions = Up + UpRight + Right + DownRight + Down + DownLeft + Left + UpLeft;
+            return positions;
+        }
+
+        
+        static void Main(string[] args)
+        {
+            //TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+            string[] nk = Console.ReadLine().Split(' ');
+
+            int n = Convert.ToInt32(nk[0]);
+
+            int k = Convert.ToInt32(nk[1]);
+
+            string[] r_qC_q = Console.ReadLine().Split(' ');
+
+            int r_q = Convert.ToInt32(r_qC_q[0]);
+
+            int c_q = Convert.ToInt32(r_qC_q[1]);
+
+            int[][] obstacles = new int[k][];
+
+            for (int i = 0; i < k; i++)
+            {
+                obstacles[i] = Array.ConvertAll(Console.ReadLine().Split(' '), obstaclesTemp => Convert.ToInt32(obstaclesTemp));
+            }
+
+            int result = queensAttack(n, k, r_q, c_q, obstacles);
+
+            //textWriter.WriteLine(result);
+
+            //textWriter.Flush();
+            //textWriter.Close();
+        }
+    }
+}
+
