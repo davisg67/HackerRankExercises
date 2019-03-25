@@ -1,0 +1,40 @@
+
+/**
+*   Return the second largest number in the array.
+*   @param {Number[]} nums - An array of numbers.
+*   @return {Number} The second largest number in the array.
+**/
+function getSecondLargest(nums) {
+    var maxValue;
+    var secondMaxValue = 0;
+
+    //Sort numbers in asscending order.
+    nums.sort(function(a, b){return a-b});
+    
+    for (var i = 0; i < nums.length; i += 1)
+        {
+            if (i === 0)
+                {
+                    maxValue = nums[i];
+                }
+            else
+                {
+                    if (nums[i] > maxValue)
+                    {
+                        secondMaxValue = maxValue;
+                        maxValue = nums[i];
+                    }
+                }
+        }
+
+    return secondMaxValue;
+}
+
+
+
+
+
+
+
+
+
