@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+class Solution {
+
+    /*
+     * Complete the timeConversion function below.
+     */
+    static string timeConversion(string s) {
+        string result = String.Empty;
+            
+        string hour = s.Substring(0, 2);
+        string period = s.Substring(8, 2);
+        s = s.Remove(8, 2);
+        s = s.Remove(0, 2);
+
+        if (period == "AM")
+        {
+            if (hour == "12")
+                hour = "00";
+
+            result = $"{hour}{s}";
+        }
+        else
+        {
+            int tmpHour = 0;
+            if (!(hour == "12"))
+            {
+                tmpHour = Int32.Parse(hour) + 12;
+                hour = tmpHour.ToString();
+            }
+
+            result = $"{hour}{s}";
+        }
+
+        return result;
+    }
+
+    static void Main(string[] args) {
+        TextWriter tw = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        string s = Console.ReadLine();
+
+        string result = timeConversion(s);
+
+        tw.WriteLine(result);
+
+        tw.Flush();
+        tw.Close();
+    }
+}
